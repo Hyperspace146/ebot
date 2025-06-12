@@ -3,6 +3,13 @@ export class Database {
         this.database = {};
     }
 
+    getECounter(username) {
+        if (this.database[username] == null) {
+            this.database[username] = 0;
+        }
+        return this.database[username];
+    }
+
     increaseECounter(username, amount) {
         if (this.database[username] == null) {
             this.database[username] = 0;
