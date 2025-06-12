@@ -4,18 +4,15 @@ const { Events } = require('discord.js');
 module.exports = {
 	name: Events.MessageCreate,
 	async execute(interaction) {
-        wordsWithE = 0;
-        if (interaction.content.includes('e') || interaction.content.includes('E')) {
-            wordsWithE++;
+        var numWordsWithE = 0;
+    
+        var tokens = interaction.content.split(" ");
+        for (var token of tokens) {
+            if (token.includes("e")) {
+                numWordsWithE++;
+            }
         }
-        // for (var token in tokens) {
-        //     if (token.includes("e")) {
-        //         wordsWithE++;
-        //     }
-        // }
 
-        console.log(wordsWithE);
-
-        await interaction.client.database.increaseECounter(interaction.author.username, wordsWithE);
+        await interaction.client.database.increaseECounter(interaction.author.username, numWordsWithE);
 	},
 };
