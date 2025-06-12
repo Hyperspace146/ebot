@@ -47,3 +47,17 @@ client.database = new Database();
 
 // Log in to Discord with your client's token
 client.login(token);
+
+// Save database to file on process close
+[
+    'beforeExit', 'uncaughtException', 'unhandledRejection', 
+    'SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 
+    'SIGABRT','SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 
+    'SIGUSR2', 'SIGTERM', 
+].forEach(event => process.on(event, writeDatabaseToFile));
+
+function writeDatabaseToFile() {
+    console.log("Saving database to file...");
+    fs.writeFileSync('./edata.json', JSON.stringify(client.database.database, null, 2) , 'utf-8');
+    console.log("Done saving.")
+}
