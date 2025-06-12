@@ -5,7 +5,7 @@ const { token } = require('./config.json');
 const { Database } = require('./database.js');
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, , GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 // Create client-accessible collection of slash commands by dynamically retrieving command files
 client.commands = new Collection();
