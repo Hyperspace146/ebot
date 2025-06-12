@@ -4,6 +4,8 @@ const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const { Database } = require('./database.js');
 
+const databaseFilePath = './edata.json';
+
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds, , GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
@@ -43,7 +45,7 @@ for (const file of eventFiles) {
 }
 
 // Set up database
-client.database = new Database();
+client.database = new Database(databaseFilePath);
 
 // Log in to Discord with your client's token
 client.login(token);
@@ -54,10 +56,7 @@ client.login(token);
     'SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 
     'SIGABRT','SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 
     'SIGUSR2', 'SIGTERM', 
-].forEach(event => process.on(event, writeDatabaseToFile));
-
-function writeDatabaseToFile() {
-    console.log("Saving database to file...");
-    fs.writeFileSync('./edata.json', JSON.stringify(client.database.database, null, 2) , 'utf-8');
-    console.log("Done saving.")
-}
+].forEach(event => process.on(event, function () {
+    client.database.writeDatabaseToFile(databaseFilePath);
+    process.exit();
+}));
