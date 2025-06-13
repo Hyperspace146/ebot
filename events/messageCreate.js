@@ -35,7 +35,7 @@ module.exports = {
                 const newBalance = Math.max(0, oldBalance - ePenalty);
                 database.setECounter(interaction.author.username, newBalance);
 
-                await interaction.channel.send(`# ${interaction.author.globalName} broke the commandments when sending the below. immediate detention, penalized ${ePenalty} e
+                await interaction.channel.send(`# ILLEGAL MESSAGE: ${interaction.author.globalName} DETAINED IMMEDIATELY, PENALIZED ${ePenalty} E
                     \n>>> ~~${interaction.content}~~`)
                 await interaction.delete();
                 return;
