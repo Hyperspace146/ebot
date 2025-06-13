@@ -1,7 +1,7 @@
 const { Events, PermissionsBitField  } = require('discord.js');
 
 const eOnlyChannels = ["e", "test"];
-const atToken = new RegExp('<@[0-9]+>');
+const atToken = new RegExp('<@.+>');
 const timeoutLength = 100
 const penaltyPercentage = 0.5;
 
