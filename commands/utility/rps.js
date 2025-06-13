@@ -35,7 +35,7 @@ module.exports = {
             await interaction.reply("tie game");
         } else if (rpsOption === cpuRpsOption + 1 || (rpsOption === 0 && cpuRpsOption === 2)) {
             const newBalance = interaction.client.database.increaseECounter(interaction.user.username, wager);
-            await interaction.reply(`nice, ${interaction.user.username} wins ${wager}, new balance: ${newBalance}`);
+            await interaction.reply(`nice, ${interaction.user.username} earns ${wager}, new balance: ${newBalance}`);
         } else {
             const newBalance = interaction.client.database.decreaseECounter(interaction.user.username, wager);
             await interaction.reply(`loser imbecile simpleton dunce ${interaction.user.username} loses ${wager}, new balance: ${newBalance}`);
