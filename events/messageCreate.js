@@ -12,7 +12,7 @@ module.exports = {
 
         // Count number of words with e, then add to counter
         var numWordsWithE = 0;
-        var tokens = interaction.content.split(" ");
+        var tokens = interaction.content.split(/\s+/);
         for (var token of tokens) {
             if (token.includes("e") || token.includes("E")) {
                 numWordsWithE++;
