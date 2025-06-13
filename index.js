@@ -7,7 +7,7 @@ const { Database } = require('./database.js');
 const databaseFilePath = './edata.json';
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds, , GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 // Create client-accessible collection of slash commands by dynamically retrieving command files
 client.commands = new Collection();
@@ -51,12 +51,19 @@ client.database = new Database(databaseFilePath);
 client.login(token);
 
 // Save database to file on process close
-[
-    'beforeExit', 'uncaughtException', 'unhandledRejection', 
-    'SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 
-    'SIGABRT','SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 
-    'SIGUSR2', 'SIGTERM', 
-].forEach(event => process.on(event, function () {
+const exitEvents = [
+    'beforeExit','SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 
+    'SIGABRT','SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM', 
+];
+const errorEvents = ['uncaughtException', 'unhandledRejection'];
+exitEvents.forEach(event => process.on(event, function () {
     client.database.writeDatabaseToFile(databaseFilePath);
     process.exit();
 }));
+errorEvents.forEach(event => {
+    process.on(event, (err) => {
+        console.error(`Error event (${event}):`, err);
+        client.database.writeDatabaseToFile(databaseFilePath);
+        process.exit(1); // Exit with failure code
+    });
+});
