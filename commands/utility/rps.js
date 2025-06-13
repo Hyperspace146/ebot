@@ -22,7 +22,7 @@ module.exports = {
         const username = interaction.user.username;
         const database = interaction.client.database;
 
-        const wager = interaction.options.getInteger('wager');
+        var wager = interaction.options.getInteger('wager');
         if (wager > database.getECounter(username)) {
             wager = database.getECounter(username);
             await interaction.reply(`wager too high, lowered to current balance: ${wager}`)
