@@ -35,6 +35,14 @@ export class Database {
         return this.database[username];
     }
 
+    setECounter(username, amount) {
+        if (this.database[username] == null) {
+            this.database[username] = 0;
+        }
+        this.database[username] = amount;
+        return this.database[username];
+    }
+
     writeDatabaseToFile(filepath) {
         console.log(`Saving database to file path ${filepath}...`);
         fs.writeFileSync(filepath, JSON.stringify(this.database, null, 2) , 'utf-8');

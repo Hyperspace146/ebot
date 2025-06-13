@@ -2,6 +2,8 @@ const { Events, PermissionsBitField  } = require('discord.js');
 
 const eOnlyChannels = ["e", "test"];
 const atToken = new RegExp('<@[0-9]+>');
+const timeoutLength = 100
+const penaltyPercentage = 0.5;
 
 // Set up listener to for all messages
 module.exports = {
@@ -20,7 +22,22 @@ module.exports = {
                 // If word doesn't contain e or E, time out the user
                 const user = await interaction.guild.members.fetch(interaction.author.id);
                 console.log(`timeout ${user.user.globalName} for word ${token}`);
-                await user.timeout(100_000, "hehe");
+
+                // Attempting to timeout the server owner results in "Missing Permissions" error response from Discord
+                if (user.id !== interaction.guild.ownerId) {
+                    await user.timeout(timeoutLength * 1000, "hehe");
+                }
+
+                // Penalize percentage of e wealth
+                const database = interaction.client.database;
+                const oldBalance = database.getECounter(interaction.author.username);
+                const ePenalty = Math.max(1, Math.round(oldBalance * penaltyPercentage));
+                const newBalance = Math.max(0, oldBalance - ePenalty);
+                database.setECounter(interaction.author.username, newBalance);
+
+                await interaction.channel.send(`# ${interaction.author.globalName} broke the commandments when sending the below. immediate detention, penalized ${ePenalty} e
+                    \n>>> ~~${interaction.content}~~`)
+                await interaction.delete();
                 return;
             }
         }
