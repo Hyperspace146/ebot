@@ -12,6 +12,13 @@ export class Database {
         return this.database[username];
     }
 
+    getELeaderboard(leaderboardLength) {
+        var sortedEntries = Object.entries(this.database)
+            .sort(([, eCount1], [, eCount2]) => eCount2 - eCount1)
+            .filter(entry => entry[0] !== "ebot");
+        return sortedEntries.slice(0, leaderboardLength);
+    }
+
     increaseECounter(username, amount) {
         if (this.database[username] == null) {
             this.database[username] = 0;

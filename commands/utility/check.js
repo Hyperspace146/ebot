@@ -10,7 +10,7 @@ module.exports = {
                 .setRequired(false)),
 	async execute(interaction) {
         const target = interaction.options.getUser('target');
-        var username = target ? target.username : interaction.user.username;
+        const username = target ? target.username : interaction.user.username;
 		await interaction.reply(username + ": " + String(interaction.client.database.getECounter(username)));
 	},
 };
