@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
         .setName('rps')
-        .setDescription('gamba')
+        .setDescription('gamble')
         .addIntegerOption(option => 
             option.setName('wager')
                 .setDescription('number of thine e betting')
@@ -23,9 +23,12 @@ module.exports = {
         const database = interaction.client.database;
 
         var wager = interaction.options.getInteger('wager');
-        if (wager > database.getECounter(username)) {
+        if (database.getECounter(username) === 0) {
+            await interaction.reply(`BALANCE EMPTY\nRESUME HARVESTING, PEASANT`)
+            return;
+        } else if (wager > database.getECounter(username)) {
             wager = database.getECounter(username);
-            await interaction.reply(`wager too high, lowered to current balance: ${wager}`)
+            await interaction.channel.send(`wager too high, lowered to current balance: ${wager}`)
         }
 
         const rpsOption = parseInt(interaction.options.getString('rps'));
